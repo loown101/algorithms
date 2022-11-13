@@ -8,7 +8,7 @@ import styles from "./string.module.css";
 import { swap, delay } from "../../utils/utils";
 import { DELAY_IN_MS } from "../../constants/delays";
 
-export type TString = {
+type TString = {
   letter: string;
   state?: ElementStates;
 };
@@ -17,20 +17,27 @@ export const StringComponent: React.FC = () => {
   const [input, setInput] = useState<string>('');
   const [valueString, setValueString] = useState<Array<TString>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [valueArray, setValueArray] = useState<Array<TString>>([]);
 
-  const createArr = (str: string) => {
-    setValueString([]);
+  const createArr = (str: string): TString[] => {
+    setValueArray([]);
+
+    const arr: TString[] = []
 
     for (let i = 0; i < str.length; i++) {
-      let item: TString = { letter: str[i], state: ElementStates.Default }
-
-      setValueString(valueString => [...valueString, item]);
+      arr.push({ letter: str[i], state: ElementStates.Default })
     }
+
+    setValueArray([...arr]);
+
+    return arr;
   }
 
   useEffect(() => {
-    createArr(input);
-  }, [input])
+    if (valueArray) {
+      setValueString([...valueArray]);
+    }
+  }, [valueArray])
 
   const reverse = async (arr: Array<TString>) => {
     let head: number = 0;
@@ -38,7 +45,7 @@ export const StringComponent: React.FC = () => {
 
     if (arr.length === 1) {
       changeColor(arr[head], arr[tail], 'modified')
-      setValueString([...arr])
+      setValueArray([...arr])
 
       return;
     }
@@ -46,7 +53,7 @@ export const StringComponent: React.FC = () => {
     if (arr.length <= 2) {
       swap(arr, head, tail);
       changeColor(arr[head], arr[tail], 'modified')
-      setValueString([...arr])
+      setValueArray([...arr])
 
       return;
     }
@@ -57,7 +64,7 @@ export const StringComponent: React.FC = () => {
       }
 
       changeColor(arr[head], arr[tail], 'chanding')
-      setValueString([...arr])
+      setValueArray([...arr])
 
       await delay(DELAY_IN_MS)
 
@@ -67,7 +74,7 @@ export const StringComponent: React.FC = () => {
       head++;
       tail--;
 
-      setValueString([...arr])
+      setValueArray([...arr])
     }
   }
 
@@ -96,19 +103,19 @@ export const StringComponent: React.FC = () => {
   }
 
 
-  const hangleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault()
 
     setIsLoading(true)
 
-    await reverse(valueString);
+    await reverse(createArr(input))
 
     setIsLoading(false)
   }
 
   return (
     <SolutionLayout title="Строка">
-      <form onSubmit={hangleSubmit} className={styles.form}>
+      <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.inputContainer}>
           <Input
             maxLength={11}

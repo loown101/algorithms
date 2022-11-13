@@ -51,8 +51,12 @@ export const StringComponent: React.FC = () => {
     }
 
     if (arr.length <= 2) {
+      changeColor(arr[head], arr[tail], 'chanding')
+
+      await delay(DELAY_IN_MS)
       swap(arr, head, tail);
       changeColor(arr[head], arr[tail], 'modified')
+
       setValueArray([...arr])
 
       return;

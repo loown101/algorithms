@@ -1,0 +1,29 @@
+.form {
+  max-width: 1200px;
+  width: 100%;
+
+  margin: 0 auto;
+}
+
+.inputContainer {
+  display: flex;
+  justify-content: center;
+
+  width: 100%;
+
+  margin: 0 auto;
+}
+
+.ul {
+  display: flex;
+  justify-content: center;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.input {
+  margin-bottom: 100px;
+}

@@ -124,6 +124,8 @@ export const SortingPage: React.FC = () => {
           setValueArray([...arr])
         }
       }
+
+
     }
 
     setValueArray([...arr])

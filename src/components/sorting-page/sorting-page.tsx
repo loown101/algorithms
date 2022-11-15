@@ -17,9 +17,11 @@ type TSort = {
 
 export const SortingPage: React.FC = () => {
   const [valueSort, setValueSort] = useState<Array<TSort>>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [valueArray, setValueArray] = useState<Array<TSort>>([]);
   const [isChecked, setIsChecked] = useState<string>('Выбор' || 'Пузырёк');
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const [isLoadingAsc, setIsLoadingAsc] = useState<boolean>(false);
+  const [isLoadingDes, setIsLoadingDes] = useState<boolean>(false);
 
   useEffect(() => {
     if (valueArray) {
@@ -54,23 +56,31 @@ export const SortingPage: React.FC = () => {
     });
 
     for (let i = 0; i < length; i++) {
+      changeColor(arr[i], 'chanding')
+      setValueArray([...arr])
+
       let minIndex = i;
       for (let j = i + 1; j < length; j++) {
+
+        changeColor(arr[j], 'chanding')
+        setValueArray([...arr])
+
+        await delay(DELAY_IN_MS)
+
         if (arr[j].element < arr[minIndex].element) {
           minIndex = j;
         }
+
+        changeColor(arr[j], 'default')
+        setValueArray([...arr])
       }
 
-      changeColor(arr[i], arr[minIndex], 'chanding')
-      setValueArray([...arr])
-
-      await delay(DELAY_IN_MS)
-
       swap(arr, i, minIndex)
-      changeColor(arr[i], arr[minIndex], 'modified')
+
+      changeColor(arr[minIndex], 'default')
+      changeColor(arr[i], 'modified')
       setValueArray([...arr])
     }
-
     setValueArray([...arr])
 
     return arr;
@@ -84,20 +94,29 @@ export const SortingPage: React.FC = () => {
     });
 
     for (let i = 0; i < length; i++) {
+      changeColor(arr[i], 'chanding')
+      setValueArray([...arr])
+
       let minIndex = i;
       for (let j = i + 1; j < length; j++) {
+
+        changeColor(arr[j], 'chanding')
+        setValueArray([...arr])
+
+        await delay(DELAY_IN_MS)
+
         if (arr[j].element > arr[minIndex].element) {
           minIndex = j;
         }
+
+        changeColor(arr[j], 'default')
+        setValueArray([...arr])
       }
 
-      changeColor(arr[i], arr[minIndex], 'chanding')
-      setValueArray([...arr])
-
-      await delay(DELAY_IN_MS)
-
       swap(arr, i, minIndex)
-      changeColor(arr[i], arr[minIndex], 'modified')
+
+      changeColor(arr[minIndex], 'default')
+      changeColor(arr[i], 'modified')
       setValueArray([...arr])
     }
     setValueArray([...arr])
@@ -111,22 +130,33 @@ export const SortingPage: React.FC = () => {
       item.state = ElementStates.Default;
     });
 
-    for (let i = 0; i < arr.length; i++) {
-      for (let j = i + 1; j < arr.length; j++) {
-        if (arr[i].element > arr[j].element) {
-          changeColor(arr[i], arr[j], 'chanding')
-          setValueArray([...arr])
+    for (let i = 0; i < (arr.length - 1); i++) {
+      for (let j = 0; j < (arr.length - i - 1); j++) {
+        changeColor(arr[j], 'chanding')
+        changeColor(arr[j + 1], 'chanding')
+        setValueArray([...arr])
 
-          await delay(DELAY_IN_MS)
-          swap(arr, i, j);
+        await delay(DELAY_IN_MS)
 
-          changeColor(arr[i], arr[j], 'modified')
+        if (arr[j].element > arr[j + 1].element) {
+
+
+          swap(arr, j, j + 1);
+
           setValueArray([...arr])
         }
+
+        changeColor(arr[j], 'default')
+        changeColor(arr[j + 1], 'default')
+        setValueArray([...arr])
+
       }
 
-
+      changeColor(arr[arr.length - i - 1], 'modified')
+      setValueArray([...arr])
     }
+
+    changeColor(arr[0], 'modified')
 
     setValueArray([...arr])
     return arr;
@@ -137,39 +167,62 @@ export const SortingPage: React.FC = () => {
       item.state = ElementStates.Default;
     });
 
-    for (let i = 0; i < arr.length; i++) {
-      for (let j = i + 1; j < arr.length; j++) {
-        if (arr[i].element < arr[j].element) {
-          changeColor(arr[i], arr[j], 'chanding')
-          setValueArray([...arr])
+    for (let i = 0; i < (arr.length - 1); i++) {
+      for (let j = 0; j < (arr.length - i - 1); j++) {
+        changeColor(arr[j], 'chanding')
+        changeColor(arr[j + 1], 'chanding')
+        setValueArray([...arr])
 
-          await delay(DELAY_IN_MS)
-          swap(arr, i, j);
+        await delay(DELAY_IN_MS)
 
-          changeColor(arr[i], arr[j], 'modified')
+        if (arr[j].element < arr[j + 1].element) {
+
+
+          swap(arr, j, j + 1);
+
           setValueArray([...arr])
         }
+
+        changeColor(arr[j], 'default')
+        changeColor(arr[j + 1], 'default')
+        setValueArray([...arr])
+
       }
+
+      changeColor(arr[arr.length - i - 1], 'modified')
+      setValueArray([...arr])
     }
+
+    changeColor(arr[0], 'modified')
 
     setValueArray([...arr])
     return arr;
+
   }
 
-  const changeColor = (head: TSort, tail: TSort, state: string) => {
+  const changeColor = (head: TSort, state: string, tail?: TSort) => {
     if (state === 'default') {
       head.state = ElementStates.Default;
-      tail.state = ElementStates.Default;
+
+      if (tail) {
+        tail.state = ElementStates.Default;
+      }
     }
 
     if (state === 'chanding') {
       head.state = ElementStates.Changing;
-      tail.state = ElementStates.Changing;
+
+      if (tail) {
+        tail.state = ElementStates.Changing;
+      }
     }
 
     if (state === 'modified') {
       head.state = ElementStates.Modified;
-      tail.state = ElementStates.Modified;
+
+      if (tail) {
+        tail.state = ElementStates.Modified;
+      }
     }
   }
 
@@ -199,7 +252,8 @@ export const SortingPage: React.FC = () => {
   }
 
   const handleAscending = async () => {
-    setIsLoading(true)
+    setIsDisabled(true)
+    setIsLoadingAsc(true)
 
     if (isChecked === 'Выбор') {
       await selectionSortAscending(valueArray);
@@ -209,12 +263,13 @@ export const SortingPage: React.FC = () => {
       await bubbleSortAscending(valueArray);
     }
 
-    setIsLoading(false)
+    setIsDisabled(false)
+    setIsLoadingAsc(false)
   }
 
   const handleDescending = async () => {
-
-    setIsLoading(true)
+    setIsDisabled(true)
+    setIsLoadingDes(true)
 
     if (isChecked === 'Выбор') {
       await selectionSortDescending(valueArray);
@@ -224,7 +279,8 @@ export const SortingPage: React.FC = () => {
       await bubbleSortDescending(valueArray);
     }
 
-    setIsLoading(false)
+    setIsDisabled(false)
+    setIsLoadingDes(false)
   }
 
   return (
@@ -248,7 +304,8 @@ export const SortingPage: React.FC = () => {
             <Button
               text={"По возврастанию"}
               type={"button"}
-              isLoader={isLoading}
+              isLoader={isLoadingAsc}
+              disabled={isDisabled}
               sorting={Direction.Ascending}
               onClick={handleAscending}
               extraClass={'mr-12'}
@@ -256,7 +313,8 @@ export const SortingPage: React.FC = () => {
             <Button
               text={"По убыванию"}
               type={"button"}
-              isLoader={isLoading}
+              isLoader={isLoadingDes}
+              disabled={isDisabled}
               sorting={Direction.Descending}
               onClick={handleDescending}
             />
@@ -264,7 +322,7 @@ export const SortingPage: React.FC = () => {
           <Button
             text={"Новый Массив"}
             type={"button"}
-            isLoader={isLoading}
+            disabled={isDisabled}
             onClick={handleCreate}
           />
         </div>

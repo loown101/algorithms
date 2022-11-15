@@ -18,22 +18,8 @@ type TStack = {
 
 export const StackPage: React.FC = () => {
   const [input, setInput] = useState<string>();
-  const [valueStack, setValueStack] = useState<Array<TStack>>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [valueArray, setValueArray] = useState<Array<TStack>>([]);
   const [stack, setStack] = useState<Stack<TStack>>(new Stack<TStack>());
-
-  useEffect(() => {
-    if (valueArray) {
-      setValueStack([...valueArray]);
-    }
-  }, [])
-
-  // useEffect(() => {
-  //   if (valueArray) {
-  //     setValueStack([...valueArray]);
-  //   }
-  // }, [valueArray])
 
   const onChange = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault()
@@ -44,23 +30,31 @@ export const StackPage: React.FC = () => {
 
 
   const addStack = async (str: string) => {
+    if (stack.getSize() > 0) {
+      stack.peak()!.head = '';
+    }
+
     stack.push({ letter: str, state: ElementStates.Changing, head: 'top' })
     setValueArray([...stack.getElement()]);
 
-    const peak = stack.peak()
+    await delay(SHORT_DELAY_IN_MS);
 
-    await delay(SHORT_DELAY_IN_MS)
-    if (peak) {
-      console.log(peak)
-
-
-      peak.state = ElementStates.Default;
-      setValueArray([...stack.getElement()]);
-    }
+    stack.peak()!.state = ElementStates.Default;
+    setValueArray([...stack.getElement()]);
   }
 
   const deleteStack = async () => {
+    stack.peak()!.state = ElementStates.Changing;
+    setValueArray([...stack.getElement()]);
+
+    await delay(SHORT_DELAY_IN_MS)
+
     stack.pop()
+
+    if (stack.getSize() > 0) {
+      stack.peak()!.head = 'top';
+    }
+
     setValueArray([...stack.getElement()]);
   }
 
@@ -70,34 +64,23 @@ export const StackPage: React.FC = () => {
   }
 
   const handleAdd = async () => {
-    setIsLoading(true)
-
     setInput('')
 
     if (input) {
       await addStack(input)
     }
-
-    setIsLoading(false)
   }
 
   const handleDelete = async () => {
-
-    setIsLoading(true)
-
-    await deleteStack()
-
-    setIsLoading(false)
+    if (stack.getSize() > 0) {
+      await deleteStack()
+    }
   }
 
   const handleReset = async () => {
-    setIsLoading(true)
-
     setInput('')
 
     await resetStack()
-
-    setIsLoading(false)
   }
 
   return (
@@ -109,26 +92,25 @@ export const StackPage: React.FC = () => {
             isLimitText={true}
             onChange={(e) => (onChange(e))}
             value={input}
-            disabled={isLoading}
             extraClass={'mb-40 mr-8'} />
           <Button
             text={"Добавить"}
             type={"button"}
-            isLoader={isLoading}
+            disabled={!input?.length}
             onClick={handleAdd}
             extraClass={'mr-12'}
           />
           <Button
             text={"Удалить"}
             type={"button"}
-            isLoader={isLoading}
+            disabled={valueArray?.length === 0}
             onClick={handleDelete}
             extraClass={'mr-12'}
           />
           <Button
             text={"Очистить"}
             type={"reset"}
-            isLoader={isLoading}
+            disabled={valueArray?.length === 0}
             onClick={handleReset}
             extraClass={'mr-12'}
           />

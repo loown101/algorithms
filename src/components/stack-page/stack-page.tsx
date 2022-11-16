@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
@@ -8,7 +8,6 @@ import styles from "./stack-page.module.css";
 import { Stack } from "./stack-class";
 import { delay } from "../../utils/utils";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
-import { couldStartTrivia } from "typescript";
 
 type TStack = {
   letter: string;
@@ -98,21 +97,20 @@ export const StackPage: React.FC = () => {
             type={"button"}
             disabled={!input?.length}
             onClick={handleAdd}
-            extraClass={'mr-12'}
+            extraClass={'mr-6'}
           />
           <Button
             text={"Удалить"}
             type={"button"}
             disabled={valueArray?.length === 0}
             onClick={handleDelete}
-            extraClass={'mr-12'}
+            extraClass={'mr-40'}
           />
           <Button
             text={"Очистить"}
             type={"reset"}
             disabled={valueArray?.length === 0}
             onClick={handleReset}
-            extraClass={'mr-12'}
           />
         </div>
         <ul className={styles.ul}>

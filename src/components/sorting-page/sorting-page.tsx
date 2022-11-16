@@ -8,7 +8,7 @@ import styles from "./sorting-page.module.css";
 import { Direction } from "../../types/direction";
 import { Column } from "../ui/column/column";
 import { ElementStates } from "../../types/element-states";
-import { max, maxLen, min, minLen } from "../../constants/sotring";
+import { max, maxLen, min, minLen } from "../../constants/sorting";
 
 type TSort = {
   element: number;

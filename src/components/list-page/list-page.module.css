@@ -1,0 +1,53 @@
+.form {
+  max-width: 1200px;
+  width: 100%;
+
+  margin: 0 auto;
+}
+
+.inputContainer {
+  display: flex;
+  justify-content: center;
+
+  max-width: 952px;
+  width: 100%;
+
+  margin: 0 auto;
+}
+
+.input {
+  width: 204px;
+  margin-bottom: 12px;
+}
+
+.ul {
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.icon {
+  position: absolute;
+
+  top: 40%;
+
+  padding-left: 130px;
+}
+
+/* ul:last-child .icon {
+  visibility: hidden;
+} */
+
+.visible {
+  visibility: visible;
+}
+
+.hidden {
+  visibility: hidden;
+}

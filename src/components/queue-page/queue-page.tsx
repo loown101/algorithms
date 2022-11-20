@@ -45,12 +45,6 @@ export const QueuePage: React.FC = () => {
     setValue([...arr])
   }, [valueArray])
 
-  // useEffect(() => {
-  //   if (valueArray) {
-  //     setValue([...valueArray]);
-  //   }
-  // }, [valueArray])
-
   const onChange = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault()
 

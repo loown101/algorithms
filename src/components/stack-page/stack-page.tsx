@@ -19,6 +19,11 @@ export const StackPage: React.FC = () => {
   const [input, setInput] = useState<string>();
   const [valueArray, setValueArray] = useState<Array<TStack>>([]);
   const [stack, setStack] = useState<Stack<TStack>>(new Stack<TStack>());
+  const [isLoadingAdd, setIsLoadingAdd] = useState<boolean>(false);
+  const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false);
+  const [isLoadingReset, setIsLoadingReset] = useState<boolean>(false);
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
+
 
   const onChange = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault()
@@ -63,23 +68,41 @@ export const StackPage: React.FC = () => {
   }
 
   const handleAdd = async () => {
+    setIsLoadingAdd(true)
+    setIsDisabled(true)
+
     setInput('')
 
     if (input) {
       await addStack(input)
     }
+
+    setIsLoadingAdd(false)
+    setIsDisabled(false)
   }
 
   const handleDelete = async () => {
+    setIsLoadingDelete(true)
+    setIsDisabled(true)
+
     if (stack.getSize() > 0) {
       await deleteStack()
     }
+
+    setIsLoadingDelete(false)
+    setIsDisabled(false)
   }
 
   const handleReset = async () => {
+    setIsLoadingReset(true)
+    setIsDisabled(true)
+
     setInput('')
 
     await resetStack()
+
+    setIsLoadingReset(false)
+    setIsDisabled(false)
   }
 
   return (
@@ -95,21 +118,24 @@ export const StackPage: React.FC = () => {
           <Button
             text={"Добавить"}
             type={"button"}
-            disabled={!input?.length}
+            disabled={!input?.length || isDisabled}
+            isLoader={isLoadingAdd}
             onClick={handleAdd}
             extraClass={'mr-6'}
           />
           <Button
             text={"Удалить"}
             type={"button"}
-            disabled={valueArray?.length === 0}
+            disabled={valueArray?.length === 0 || isDisabled}
+            isLoader={isLoadingDelete}
             onClick={handleDelete}
             extraClass={'mr-40'}
           />
           <Button
             text={"Очистить"}
             type={"reset"}
-            disabled={valueArray?.length === 0}
+            disabled={valueArray?.length === 0 || isDisabled}
+            isLoader={isLoadingReset}
             onClick={handleReset}
           />
         </div>

@@ -395,11 +395,11 @@ export const ListPage: React.FC = () => {
 
         <ul className={styles.ul}>
           {upArray?.map((item, index) => (
-            <li key={index} className={(item) ? styles.visible : styles.hidden}>
+            <li key={index} className={`${(item) ? styles.visible : styles.hidden} ${styles.liSmall}`}>
               <Circle
                 state={item?.state}
                 letter={item?.letter}
-                extraClass={'mb-12'}
+                extraClass={'mb-12 ml-6'}
                 isSmall={true}
               />
             </li>
@@ -409,14 +409,14 @@ export const ListPage: React.FC = () => {
 
         <ul className={styles.ul}>
           {value?.map((item, index) => (
-            <li key={index}>
+            <li key={index} className={styles.li}>
               <Circle
                 state={item.state}
                 letter={item.letter}
                 head={item.head}
                 tail={item.tail}
                 index={index}
-                extraClass={'ml-20'}
+                extraClass={'ml-20 ml-6'}
               />
               <div className={styles.icon}>
                 <ArrowIcon fill={'#0032FF'} />
@@ -428,11 +428,11 @@ export const ListPage: React.FC = () => {
 
         <ul className={styles.ul}>
           {downArray?.map((item, index) => (
-            <li key={index} className={(item) ? styles.visible : styles.hidden}>
+            <li key={index} className={`${(item) ? styles.visible : styles.hidden} ${styles.liSmall}`}>
               <Circle
                 state={item?.state}
                 letter={item?.letter}
-                extraClass={'ml-16 mt-20'}
+                extraClass={'ml-6 mt-20'}
                 isSmall={true}
               />
             </li>

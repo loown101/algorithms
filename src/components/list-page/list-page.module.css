@@ -32,6 +32,11 @@
   list-style: none;
 }
 
+.liSmall {
+  width: 80px;
+  padding-left: 40px;
+}
+
 .icon {
   position: absolute;
 
@@ -40,9 +45,9 @@
   padding-left: 130px;
 }
 
-/* ul:last-child .icon {
+.li:nth-last-child(1) .icon {
   visibility: hidden;
-} */
+}
 
 .visible {
   visibility: visible;

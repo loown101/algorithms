@@ -26,8 +26,8 @@ export const QueuePage: React.FC = () => {
   useEffect(() => {
     const arr: TQueue[] = []
 
-    let tail = queue.getTail();
-    let head = queue.getHead();
+    const tail = queue.getTail();
+    const head = queue.getHead();
 
     for (const elem of valueArray) {
       if (elem) {
@@ -45,10 +45,10 @@ export const QueuePage: React.FC = () => {
     setValue([...arr])
   }, [valueArray])
 
-  const onChange = (e: React.FormEvent<HTMLInputElement>) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
 
-    let target = e.target as HTMLInputElement;
+    const target = e.target as HTMLInputElement;
     setInput(target.value);
   }
 
@@ -101,13 +101,13 @@ export const QueuePage: React.FC = () => {
 
   return (
     <SolutionLayout title="Очередь">
-      <form className={styles.form}>
+      <div className={styles.form}>
         <div className={styles.inputContainer}>
           <Input
             maxLength={4}
             isLimitText={true}
-            onChange={(e) => (onChange(e))}
-            value={input}
+            onChange={onChange}
+            value={input || ''}
             extraClass={'mb-40 mr-8'} />
           <Button
             text={"Добавить"}
@@ -145,7 +145,7 @@ export const QueuePage: React.FC = () => {
           ))
           }
         </ul>
-      </form>
+      </div>
     </SolutionLayout>
   );
 };

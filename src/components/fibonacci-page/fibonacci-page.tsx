@@ -13,7 +13,7 @@ type TFibonacci = {
 };
 
 export const FibonacciPage: React.FC = () => {
-  const [input, setInput] = useState<undefined | number>(undefined);
+  const [input, setInput] = useState<null | number>(null);
   const [valueNumber, setValueNumber] = useState<Array<TFibonacci>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [valueArray, setValueArray] = useState<Array<TFibonacci>>([]);
@@ -27,8 +27,8 @@ export const FibonacciPage: React.FC = () => {
   const fibonacci = async (n: number) => {
     const arr: TFibonacci[] = [];
 
-    let a: number = 1;
-    let b: number = 1;
+    let a = 1;
+    let b = 1;
 
     for (let i = 0; i <= n; i++) {
       if (i < 2) {
@@ -39,7 +39,7 @@ export const FibonacciPage: React.FC = () => {
       }
 
       if (i >= 2) {
-        let c: number = a + b;
+        const c = a + b;
         a = b;
         b = c;
 
@@ -51,10 +51,10 @@ export const FibonacciPage: React.FC = () => {
     }
   }
 
-  const onChange = (e: React.FormEvent<HTMLInputElement>) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
 
-    let target = e.target as HTMLInputElement;
+    const target = e.target as HTMLInputElement;
 
     if (target.value.length <= 2) {
       setInput(+target.value);
@@ -83,8 +83,7 @@ export const FibonacciPage: React.FC = () => {
             min={1}
             max={19}
             isLimitText={true}
-            onChange={(e) => (onChange(e))}
-            value={input}
+            onChange={onChange}
             disabled={isLoading}
             extraClass={'mb-40 mr-8'}
           />
@@ -92,6 +91,7 @@ export const FibonacciPage: React.FC = () => {
             text={"Рассчитать"}
             type={"submit"}
             isLoader={isLoading}
+            disabled={!input}
           />
         </div>
         <ul className={styles.ul}>

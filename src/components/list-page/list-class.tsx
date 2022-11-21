@@ -140,7 +140,7 @@ export class LinkedList<T> implements ILinkedList<T> {
   }
 
   toArray() {
-    let arr: Array<T> = [];
+    const arr: Array<T> = [];
     let curr = this.head;
 
     while (curr) {

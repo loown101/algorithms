@@ -40,22 +40,22 @@ export const StringComponent: React.FC = () => {
   }, [valueArray])
 
   const reverse = async (arr: Array<TString>) => {
-    let head: number = 0;
-    let tail: number = arr.length - 1;
+    let head = 0;
+    let tail = arr.length - 1;
 
     if (arr.length === 1) {
-      changeColor(arr[head], arr[tail], 'modified')
+      changeColor(arr[head], arr[tail], ElementStates.Modified)
       setValueArray([...arr])
 
       return;
     }
 
     if (arr.length <= 2) {
-      changeColor(arr[head], arr[tail], 'chanding')
+      changeColor(arr[head], arr[tail], ElementStates.Changing)
 
       await delay(DELAY_IN_MS)
       swap(arr, head, tail);
-      changeColor(arr[head], arr[tail], 'modified')
+      changeColor(arr[head], arr[tail], ElementStates.Modified)
 
       setValueArray([...arr])
 
@@ -64,16 +64,16 @@ export const StringComponent: React.FC = () => {
 
     while (head <= tail) {
       if (head === tail) {
-        changeColor(arr[head], arr[tail], 'modified')
+        changeColor(arr[head], arr[tail], ElementStates.Modified)
       }
 
-      changeColor(arr[head], arr[tail], 'chanding')
+      changeColor(arr[head], arr[tail], ElementStates.Changing)
       setValueArray([...arr])
 
       await delay(DELAY_IN_MS)
 
       swap(arr, head, tail);
-      changeColor(arr[head], arr[tail], 'modified')
+      changeColor(arr[head], arr[tail], ElementStates.Modified)
 
       head++;
       tail--;
@@ -82,27 +82,15 @@ export const StringComponent: React.FC = () => {
     }
   }
 
-  const changeColor = (head: TString, tail: TString, state: string) => {
-    if (state === 'default') {
-      head.state = ElementStates.Default;
-      tail.state = ElementStates.Default;
-    }
-
-    if (state === 'chanding') {
-      head.state = ElementStates.Changing;
-      tail.state = ElementStates.Changing;
-    }
-
-    if (state === 'modified') {
-      head.state = ElementStates.Modified;
-      tail.state = ElementStates.Modified;
-    }
+  const changeColor = (head: TString, tail: TString, state: ElementStates) => {
+    head.state = state;
+    tail.state = state;
   }
 
-  const onChange = (e: React.FormEvent<HTMLInputElement>) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
 
-    let target = e.target as HTMLInputElement;
+    const target = e.target as HTMLInputElement;
     setInput(target.value);
   }
 
@@ -124,7 +112,7 @@ export const StringComponent: React.FC = () => {
           <Input
             maxLength={11}
             isLimitText={true}
-            onChange={(e) => (onChange(e))}
+            onChange={onChange}
             value={input}
             disabled={isLoading}
             extraClass={'mb-40 mr-8'} />
@@ -132,6 +120,7 @@ export const StringComponent: React.FC = () => {
             text={"Развернуть"}
             type={"submit"}
             isLoader={isLoading}
+            disabled={!input}
           />
         </div>
         <ul className={styles.ul}>

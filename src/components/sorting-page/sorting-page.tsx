@@ -24,10 +24,8 @@ export const SortingPage: React.FC = () => {
   const [isLoadingDes, setIsLoadingDes] = useState<boolean>(false);
 
   useEffect(() => {
-    if (valueArray) {
-      setValueSort([...valueArray]);
-    }
-  }, [valueArray])
+    setValueSort(createArr(randomArr(minLen, maxLen, min, max)))
+  }, [])
 
   const getRandomIntInclusive = (min: number, max: number): number => {
     min = Math.ceil(min);
@@ -56,13 +54,13 @@ export const SortingPage: React.FC = () => {
     });
 
     for (let i = 0; i < length; i++) {
-      changeColor(arr[i], 'chanding')
+      changeColor(arr[i], ElementStates.Changing)
       setValueArray([...arr])
 
       let minIndex = i;
       for (let j = i + 1; j < length; j++) {
 
-        changeColor(arr[j], 'chanding')
+        changeColor(arr[j], ElementStates.Changing)
         setValueArray([...arr])
 
         await delay(DELAY_IN_MS)
@@ -71,14 +69,14 @@ export const SortingPage: React.FC = () => {
           minIndex = j;
         }
 
-        changeColor(arr[j], 'default')
+        changeColor(arr[j], ElementStates.Default)
         setValueArray([...arr])
       }
 
       swap(arr, i, minIndex)
 
-      changeColor(arr[minIndex], 'default')
-      changeColor(arr[i], 'modified')
+      changeColor(arr[minIndex], ElementStates.Default)
+      changeColor(arr[i], ElementStates.Modified)
       setValueArray([...arr])
     }
     setValueArray([...arr])
@@ -94,13 +92,13 @@ export const SortingPage: React.FC = () => {
     });
 
     for (let i = 0; i < length; i++) {
-      changeColor(arr[i], 'chanding')
+      changeColor(arr[i], ElementStates.Changing)
       setValueArray([...arr])
 
       let minIndex = i;
       for (let j = i + 1; j < length; j++) {
 
-        changeColor(arr[j], 'chanding')
+        changeColor(arr[j], ElementStates.Changing)
         setValueArray([...arr])
 
         await delay(DELAY_IN_MS)
@@ -109,14 +107,14 @@ export const SortingPage: React.FC = () => {
           minIndex = j;
         }
 
-        changeColor(arr[j], 'default')
+        changeColor(arr[j], ElementStates.Default)
         setValueArray([...arr])
       }
 
       swap(arr, i, minIndex)
 
-      changeColor(arr[minIndex], 'default')
-      changeColor(arr[i], 'modified')
+      changeColor(arr[minIndex], ElementStates.Default)
+      changeColor(arr[i], ElementStates.Modified)
       setValueArray([...arr])
     }
     setValueArray([...arr])
@@ -132,8 +130,8 @@ export const SortingPage: React.FC = () => {
 
     for (let i = 0; i < (arr.length - 1); i++) {
       for (let j = 0; j < (arr.length - i - 1); j++) {
-        changeColor(arr[j], 'chanding')
-        changeColor(arr[j + 1], 'chanding')
+        changeColor(arr[j], ElementStates.Changing)
+        changeColor(arr[j + 1], ElementStates.Changing)
         setValueArray([...arr])
 
         await delay(DELAY_IN_MS)
@@ -146,17 +144,17 @@ export const SortingPage: React.FC = () => {
           setValueArray([...arr])
         }
 
-        changeColor(arr[j], 'default')
-        changeColor(arr[j + 1], 'default')
+        changeColor(arr[j], ElementStates.Default)
+        changeColor(arr[j + 1], ElementStates.Default)
         setValueArray([...arr])
 
       }
 
-      changeColor(arr[arr.length - i - 1], 'modified')
+      changeColor(arr[arr.length - i - 1], ElementStates.Modified)
       setValueArray([...arr])
     }
 
-    changeColor(arr[0], 'modified')
+    changeColor(arr[0], ElementStates.Modified)
 
     setValueArray([...arr])
     return arr;
@@ -169,8 +167,8 @@ export const SortingPage: React.FC = () => {
 
     for (let i = 0; i < (arr.length - 1); i++) {
       for (let j = 0; j < (arr.length - i - 1); j++) {
-        changeColor(arr[j], 'chanding')
-        changeColor(arr[j + 1], 'chanding')
+        changeColor(arr[j], ElementStates.Changing)
+        changeColor(arr[j + 1], ElementStates.Changing)
         setValueArray([...arr])
 
         await delay(DELAY_IN_MS)
@@ -183,46 +181,28 @@ export const SortingPage: React.FC = () => {
           setValueArray([...arr])
         }
 
-        changeColor(arr[j], 'default')
-        changeColor(arr[j + 1], 'default')
+        changeColor(arr[j], ElementStates.Default)
+        changeColor(arr[j + 1], ElementStates.Default)
         setValueArray([...arr])
 
       }
 
-      changeColor(arr[arr.length - i - 1], 'modified')
+      changeColor(arr[arr.length - i - 1], ElementStates.Modified)
       setValueArray([...arr])
     }
 
-    changeColor(arr[0], 'modified')
+    changeColor(arr[0], ElementStates.Modified)
 
     setValueArray([...arr])
     return arr;
 
   }
 
-  const changeColor = (head: TSort, state: string, tail?: TSort) => {
-    if (state === 'default') {
-      head.state = ElementStates.Default;
+  const changeColor = (head: TSort, state: ElementStates, tail?: TSort) => {
+    head.state = state;
 
-      if (tail) {
-        tail.state = ElementStates.Default;
-      }
-    }
-
-    if (state === 'chanding') {
-      head.state = ElementStates.Changing;
-
-      if (tail) {
-        tail.state = ElementStates.Changing;
-      }
-    }
-
-    if (state === 'modified') {
-      head.state = ElementStates.Modified;
-
-      if (tail) {
-        tail.state = ElementStates.Modified;
-      }
+    if (tail) {
+      tail.state = state;
     }
   }
 
@@ -241,7 +221,7 @@ export const SortingPage: React.FC = () => {
   }
 
   const onChecked = (e: React.SyntheticEvent<HTMLInputElement>) => {
-    let target = e.target as HTMLInputElement;
+    const target = e.target as HTMLInputElement;
 
     setIsChecked(target.value)
   }
@@ -285,7 +265,7 @@ export const SortingPage: React.FC = () => {
 
   return (
     <SolutionLayout title="Сортировка массива">
-      <form className={styles.form}>
+      <div className={styles.form}>
         <div className={styles.inputContainer}>
           <div className={styles.itemContainer}>
             <RadioInput
@@ -293,19 +273,23 @@ export const SortingPage: React.FC = () => {
               name="array"
               value="Выбор"
               onClick={onChecked}
-              extraClass={'mr-12'} />
+              extraClass={'mr-12'}
+              disabled={valueSort.length === 0}
+            />
             <RadioInput
               label="Пузырёк"
               name="array"
               value="Пузырёк"
-              onClick={onChecked} />
+              onClick={onChecked}
+              disabled={valueSort.length === 0}
+            />
           </div>
           <div className={styles.itemContainer}>
             <Button
               text={"По возврастанию"}
               type={"button"}
               isLoader={isLoadingAsc}
-              disabled={isDisabled}
+              disabled={isDisabled || valueSort.length === 0}
               sorting={Direction.Ascending}
               onClick={handleAscending}
               extraClass={'mr-12'}
@@ -314,7 +298,7 @@ export const SortingPage: React.FC = () => {
               text={"По убыванию"}
               type={"button"}
               isLoader={isLoadingDes}
-              disabled={isDisabled}
+              disabled={isDisabled || valueSort.length === 0}
               sorting={Direction.Descending}
               onClick={handleDescending}
             />
@@ -339,7 +323,7 @@ export const SortingPage: React.FC = () => {
           ))
           }
         </ul>
-      </form>
+      </div>
     </SolutionLayout>
   );
 };

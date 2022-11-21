@@ -60,20 +60,20 @@ export const ListPage: React.FC = () => {
     setValue([...arr])
   }, [valueArray, upArray, downArray])
 
-  const onChangeValue = (e: React.FormEvent<HTMLInputElement>) => {
+  const onChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
 
-    let target = e.target as HTMLInputElement;
+    const target = e.target as HTMLInputElement;
 
     if (target.value.length <= 4) {
       setInputValue(target.value);
     }
   }
 
-  const onChangeIndex = (e: React.FormEvent<HTMLInputElement>) => {
+  const onChangeIndex = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
 
-    let target = e.target as HTMLInputElement;
+    const target = e.target as HTMLInputElement;
 
     setInputIndex(+target.value);
 
@@ -310,14 +310,14 @@ export const ListPage: React.FC = () => {
 
   return (
     <SolutionLayout title="Связный список">
-      <form className={styles.form}>
+      <div className={styles.form}>
         <div className={styles.inputContainer}>
           <div className={styles.input}>
             <Input
               maxLength={4}
               isLimitText={true}
-              onChange={(e) => (onChangeValue(e))}
-              value={inputValue}
+              onChange={onChangeValue}
+              value={inputValue || ''}
               disabled={isDisabled}
             />
           </div>
@@ -325,7 +325,7 @@ export const ListPage: React.FC = () => {
             text={"Добавить в head"}
             type={"button"}
             isLoader={isLoadingAddHead}
-            disabled={isDisabled}
+            disabled={isDisabled || !inputValue}
             onClick={handleAddHead}
             linkedList={'small'}
             extraClass={'mr-6 ml-6'}
@@ -334,10 +334,10 @@ export const ListPage: React.FC = () => {
             text={"Добавить в tail"}
             type={"button"}
             isLoader={isLoadingAddTail}
-            disabled={isDisabled}
+            disabled={isDisabled || !inputValue}
             onClick={handleAddTail}
             linkedList={'small'}
-            extraClass={'mr-8'}
+            extraClass={'mr-6'}
           />
           <Button
             text={"Удалить из head"}
@@ -364,7 +364,7 @@ export const ListPage: React.FC = () => {
               min={0}
               max={(valueArray.length === 0) ? 0 : valueArray.length - 1}
               isLimitText={true}
-              onChange={(e) => (onChangeIndex(e))}
+              onChange={onChangeIndex}
               value={inputIndex || ''}
               disabled={isDisabled}
             />
@@ -385,7 +385,7 @@ export const ListPage: React.FC = () => {
             type={"button"}
             isLoader={isLoadingDeleteIndex}
             disabled={isDisabled
-              || (!inputValue || !inputIndex)
+              || (!inputIndex)
               || (list.getSize() === 0)
               || (inputIndex < 0 || inputIndex >= list.getSize())}
             onClick={handleDeleteIndex}
@@ -440,7 +440,7 @@ export const ListPage: React.FC = () => {
           }
         </ul>
 
-      </form>
+      </div>
     </SolutionLayout>
   );
 };

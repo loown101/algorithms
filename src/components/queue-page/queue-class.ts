@@ -9,7 +9,7 @@ export class Queue<T> implements IQueue<T> {
   private head = -1;
   private tail = -1;
   private readonly size: number = 0;
-  private length: number = 0;
+  private length = 0;
 
   constructor(size: number) {
     this.size = size;

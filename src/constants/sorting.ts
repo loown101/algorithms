@@ -1,5 +1,5 @@
-export const minLen: number = 3;
-export const maxLen: number = 17;
-export const min: number = 0;
-export const max: number = 100;
+export const minLen = 3;
+export const maxLen = 17;
+export const min = 0;
+export const max = 100;
 export const maxSizeQueue = 7;

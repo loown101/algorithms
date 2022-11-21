@@ -27,6 +27,13 @@ export const SortingPage: React.FC = () => {
     setValueSort(createArr(randomArr(minLen, maxLen, min, max)))
   }, [])
 
+
+  useEffect(() => {
+    if (valueArray) {
+      setValueSort([...valueArray]);
+    }
+  }, [valueArray])
+
   const getRandomIntInclusive = (min: number, max: number): number => {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -199,12 +206,14 @@ export const SortingPage: React.FC = () => {
   }
 
   const changeColor = (head: TSort, state: ElementStates, tail?: TSort) => {
+
     head.state = state;
 
     if (tail) {
       tail.state = state;
     }
   }
+
 
   const createArr = (randomArr: number[]): TSort[] => {
     setValueArray([]);

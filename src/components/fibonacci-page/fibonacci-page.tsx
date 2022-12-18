@@ -61,7 +61,6 @@ export const FibonacciPage: React.FC = () => {
     }
   }
 
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 

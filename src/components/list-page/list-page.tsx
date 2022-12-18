@@ -395,7 +395,7 @@ export const ListPage: React.FC = () => {
 
         <ul className={styles.ul}>
           {upArray?.map((item, index) => (
-            <li key={index} className={`${(item) ? styles.visible : styles.hidden} ${styles.liSmall}`}>
+            <li key={index} className={`${(item) ? styles.visible : styles.hidden} ${styles.small}`}>
               <Circle
                 state={item?.state}
                 letter={item?.letter}
@@ -428,7 +428,7 @@ export const ListPage: React.FC = () => {
 
         <ul className={styles.ul}>
           {downArray?.map((item, index) => (
-            <li key={index} className={`${(item) ? styles.visible : styles.hidden} ${styles.liSmall}`}>
+            <li key={index} className={`${(item) ? styles.visible : styles.hidden} ${styles.small}`}>
               <Circle
                 state={item?.state}
                 letter={item?.letter}

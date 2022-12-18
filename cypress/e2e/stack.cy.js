@@ -1,4 +1,4 @@
-import { listItem, input } from "../utils/variables";
+import { listItem, input, state } from "../constants/variables";
 
 describe('stack-page', () => {
   before(() => {
@@ -21,13 +21,18 @@ describe('stack-page', () => {
     cy.contains('Добавить').click()
 
     cy.tick(1000)
-    cy.get(listItem).eq(0).last().contains('4')
+    cy.get(listItem).eq(0).last().find(state.changing).contains('4')
+    cy.get(listItem).eq(0).contains('top');
+    cy.tick(1000)
+    cy.get(listItem).eq(0).last().find(state.default).contains('4')
 
     cy.get(input).type('7')
     cy.contains('Добавить').click()
-
     cy.tick(1000)
-    cy.get(listItem).eq(1).last().contains('7')
+    cy.get(listItem).eq(1).last().find(state.changing).contains('7')
+    cy.get(listItem).eq(1).contains('top');
+    cy.tick(1000)
+    cy.get(listItem).eq(1).last().find(state.default).contains('7')
   });
 
   it('should delete element correctly in stack', () => {
@@ -39,19 +44,33 @@ describe('stack-page', () => {
     cy.contains('Добавить').click()
 
     cy.tick(1000)
-    cy.get(listItem).eq(0).last().contains('12')
+    cy.get(listItem).eq(0).last().find(state.changing).contains('12')
+    cy.get(listItem).eq(0).contains('top');
+    cy.tick(1000)
+    cy.get(listItem).eq(0).last().find(state.default).contains('12')
 
     cy.get(input).type('9')
     cy.contains('Добавить').click()
 
     cy.tick(1000)
-    cy.get(listItem).eq(1).last().contains('9')
-
-    cy.contains('Удалить').click()
+    cy.get(listItem).eq(1).last().find(state.changing).contains('9')
+    cy.get(listItem).eq(1).contains('top');
     cy.tick(1000)
+    cy.get(listItem).eq(1).last().find(state.default).contains('9')
 
     cy.contains('Удалить').click()
+
+    cy.get(listItem).eq(1).last().find(state.changing).contains('9');
+    cy.tick(1000)
+    cy.get(listItem).eq(0).contains('top');
+    cy.tick(1000)
+    cy.get(listItem).should('have.length', 1)
+
+    cy.contains('Удалить').click()
+
+    cy.get(listItem).eq(0).last().find(state.changing).contains('12');
     cy.tick(1000);
+    cy.get(listItem).should('have.length', 0)
   });
 
   it('should reset element correctly', () => {
@@ -63,13 +82,19 @@ describe('stack-page', () => {
     cy.contains('Добавить').click()
 
     cy.tick(1000)
-    cy.get(listItem).eq(0).last().contains('8')
+    cy.get(listItem).eq(0).last().find(state.changing).contains('8')
+    cy.get(listItem).eq(0).contains('top');
+    cy.tick(1000)
+    cy.get(listItem).eq(0).last().find(state.default).contains('8')
 
     cy.get(input).type('3')
     cy.contains('Добавить').click()
 
     cy.tick(1000)
-    cy.get(listItem).eq(1).last().contains('3')
+    cy.get(listItem).eq(1).last().find(state.changing).contains('3')
+    cy.get(listItem).eq(1).contains('top');
+    cy.tick(1000)
+    cy.get(listItem).eq(1).last().find(state.default).contains('3')
 
     cy.contains('Очистить').click()
 

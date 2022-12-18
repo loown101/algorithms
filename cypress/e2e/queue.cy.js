@@ -1,4 +1,4 @@
-import { listItem, input } from "../utils/variables";
+import { listItem, input, state } from "../constants/variables";
 
 describe('queue-page', () => {
   before(() => {
@@ -21,13 +21,21 @@ describe('queue-page', () => {
     cy.contains('Добавить').click()
 
     cy.tick(1000)
-    cy.get(listItem).eq(0).last().contains('4')
+    cy.get(listItem).eq(0).last().find(state.changing).contains('4')
+    cy.get(listItem).eq(0).contains('head');
+    cy.get(listItem).eq(0).contains('tail');
+    cy.tick(1000)
+    cy.get(listItem).eq(0).last().find(state.default).contains('4')
 
     cy.get(input).type('7')
     cy.contains('Добавить').click()
 
     cy.tick(1000)
-    cy.get(listItem).eq(1).last().contains('7')
+    cy.get(listItem).eq(1).last().find(state.changing).contains('7')
+    cy.get(listItem).eq(0).contains('head');
+    cy.get(listItem).eq(1).contains('tail');
+    cy.tick(1000)
+    cy.get(listItem).eq(1).last().find(state.default).contains('7')
   });
 
   it('should delete element correctly in queue', () => {
@@ -39,19 +47,46 @@ describe('queue-page', () => {
     cy.contains('Добавить').click()
 
     cy.tick(1000)
-    cy.get(listItem).eq(0).last().contains('12')
+    cy.get(listItem).eq(0).last().find(state.changing).contains('12')
+    cy.get(listItem).eq(0).contains('head');
+    cy.get(listItem).eq(0).contains('tail');
+
+    cy.tick(1000)
+    cy.get(listItem).eq(0).last().find(state.default).contains('12')
 
     cy.get(input).type('9')
     cy.contains('Добавить').click()
 
     cy.tick(1000)
-    cy.get(listItem).eq(1).last().contains('9')
+    cy.get(listItem).eq(1).last().find(state.changing).contains('9')
+    cy.get(listItem).eq(0).contains('head');
+    cy.get(listItem).eq(1).contains('tail');
 
     cy.tick(1000)
+    cy.get(listItem).eq(1).last().find(state.default).contains('9')
+
     cy.contains('Удалить').click()
 
     cy.tick(1000)
+    cy.get(listItem).eq(0).last().find(state.changing).contains('12');
+    cy.get(listItem).eq(0).contains('head');
+
+    cy.tick(1000)
+    cy.get(listItem).eq(0).last().find(state.default).should('not.have.text')
+    cy.get(listItem).eq(1).contains('head');
+    cy.get(listItem).eq(1).contains('tail');
+    cy.tick(1000)
+    cy.get(listItem).eq(1).last().find(state.default).contains('9');
+
     cy.contains('Удалить').click()
+
+    cy.tick(1000)
+    cy.get(listItem).eq(1).last().find(state.changing).contains('9');
+    cy.get(listItem).eq(1).contains('head');
+    cy.get(listItem).eq(1).contains('tail');
+
+    cy.tick(1000)
+    cy.get(listItem).eq(1).last().find(state.default).should('not.have.text')
   });
 
   it('should reset element correctly in queue', () => {
@@ -63,13 +98,23 @@ describe('queue-page', () => {
     cy.contains('Добавить').click()
 
     cy.tick(1000)
-    cy.get(listItem).eq(0).last().contains('8')
+    cy.get(listItem).eq(0).last().find(state.changing).contains('8')
+    cy.get(listItem).eq(0).contains('head');
+    cy.get(listItem).eq(0).contains('tail');
+
+    cy.tick(1000)
+    cy.get(listItem).eq(0).last().find(state.default).contains('8')
 
     cy.get(input).type('3')
     cy.contains('Добавить').click()
 
     cy.tick(1000)
-    cy.get(listItem).eq(1).last().contains('3')
+    cy.get(listItem).eq(1).last().find(state.changing).contains('3')
+    cy.get(listItem).eq(0).contains('head');
+    cy.get(listItem).eq(1).contains('tail');
+
+    cy.tick(1000)
+    cy.get(listItem).eq(1).last().find(state.default).contains('3')
 
     cy.contains('Очистить').click()
 

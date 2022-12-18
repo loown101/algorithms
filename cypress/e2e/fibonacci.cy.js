@@ -1,4 +1,4 @@
-import { listItem, input } from "../utils/variables";
+import { listItem, input } from "../constants/variables";
 
 describe('fibonacci-page', () => {
   before(() => {

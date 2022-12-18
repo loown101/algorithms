@@ -1,4 +1,4 @@
-import { listItem, input, listItemLargeClass, listLargeClass } from "../constants/variables";
+import { listItem, input, listItemLargeClass, listLargeClass, state } from "../constants/variables";
 
 describe('list-page', () => {
   before(() => {
@@ -25,9 +25,11 @@ describe('list-page', () => {
     cy.tick(1000)
 
     cy.get(listItemLargeClass).eq(0).last().contains('0')
+    cy.get(listItemLargeClass).eq(0).last().contains('head')
     cy.get(listItemLargeClass).eq(1).last().contains('34')
     cy.get(listItemLargeClass).eq(2).last().contains('8')
     cy.get(listItemLargeClass).eq(3).last().contains('1')
+    cy.get(listItemLargeClass).eq(3).last().contains('tail')
   });
 
   it('should add head s element in list', () => {
@@ -39,7 +41,11 @@ describe('list-page', () => {
     cy.contains('Добавить в head').click()
 
     cy.tick(1000)
-    cy.get(listItemLargeClass).eq(0).contains('7')
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(0).last().find(state.modified).contains('7')
+
+    cy.tick(1000)
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(0).last().contains('head')
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(0).last().find(state.default).contains('7')
   });
 
   it('should add tail s element in list', () => {
@@ -51,7 +57,13 @@ describe('list-page', () => {
     cy.contains('Добавить в tail').click()
 
     cy.tick(1000)
-    cy.get(`${listItemLargeClass}:last-child`).contains('0')
+    cy.get(`${listItemLargeClass}:last-child`).last().find(state.modified).contains('0')
+    cy.tick(1000)
+
+    cy.get(`${listItemLargeClass}:last-child`).last().contains('tail')
+    cy.get(`${listItemLargeClass}:last-child`).last().find(state.modified).contains('0')
+
+
   });
 
   it('should add index s element in list', () => {
@@ -70,7 +82,10 @@ describe('list-page', () => {
     cy.get(`ul${listLargeClass} > ${listItem}`).should('have.length', 4)
 
     cy.tick(1000)
-    cy.get(`ul${listLargeClass} > ${listItem}`).eq(2).contains('1')
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(2).last().find(state.modified).contains('1')
+
+    cy.tick(1000)
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(2).last().find(state.default).contains('1')
 
     cy.tick(1000)
     cy.get(`ul${listLargeClass} > ${listItem}`).should('have.length', 5)
@@ -82,11 +97,25 @@ describe('list-page', () => {
     cy.clock()
 
     cy.contains('Удалить из head').click()
-    cy.tick(1000)
-    cy.get(`ul${listLargeClass} > ${listItem}`).should('have.length', 3)
 
-    cy.contains('Удалить').click()
+
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(0).last().find(state.default)
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(0).last().contains('head')
     cy.tick(1000)
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(0).last().find(state.default).contains('34')
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(0).last().contains('head')
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).should('have.length', 3)
+
+
+    cy.contains('Удалить из head').click()
+
+    cy.tick(1000)
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(0).last().find(state.default)
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(0).last().contains('head')
+
+    cy.tick(1000)
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(0).last().find(state.default).contains('8')
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(0).last().contains('head')
     cy.get(`ul${listLargeClass} > ${listItem}`).should('have.length', 2)
   });
 
@@ -96,26 +125,46 @@ describe('list-page', () => {
     cy.clock()
 
     cy.contains('Удалить из tail').click()
-    cy.tick(1000)
-    cy.get(`ul${listLargeClass} > ${listItem}`).should('have.length', 3)
 
-    cy.contains('Удалить').click()
     cy.tick(1000)
-    cy.get(`ul${listLargeClass} > ${listItem}`).should('have.length', 2)
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(3).last().find(state.default)
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(2).last().contains('tail')
+
+    cy.tick(1000)
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(2).last().find(state.default).contains('8')
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(2).last().contains('tail')
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).should('have.length', 3)
+
+    cy.contains('Удалить из tail').click()
+
+    cy.tick(1000)
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(2).last().find(state.default)
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(1).last().contains('tail')
+
+    cy.tick(1000)
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(1).last().find(state.default).contains('34')
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(1).last().contains('tail')
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).should('have.length', 2)
   });
 
   it('should delete index s element in list', () => {
     cy.visit('list');
 
     cy.clock()
+
     cy.get('input').last().type(1)
     cy.contains('Удалить по индексу').click()
+
     cy.tick(1000)
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(0).find(state.changing).contains('0')
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(0).contains('head')
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(1).find(state.changing).contains('34')
 
     cy.tick(1000)
     cy.get(`ul${listLargeClass} > ${listItem}`).eq(1).should('not.have.text')
 
     cy.tick(1000)
+    cy.get(`ul${listLargeClass} > li${listItemLargeClass}`).eq(1).find(state.default).contains('8')
     cy.get(`ul${listLargeClass} > ${listItem}`).should('have.length', 3)
   });
 });

@@ -32,6 +32,10 @@
   list-style: none;
 }
 
+.ulLarge {
+  list-style: none;
+}
+
 .liSmall {
   width: 80px;
   padding-left: 40px;

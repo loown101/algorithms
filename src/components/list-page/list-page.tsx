@@ -407,7 +407,7 @@ export const ListPage: React.FC = () => {
           }
         </ul>
 
-        <ul className={styles.ul}>
+        <ul className={`${styles.ul} ${styles.ulLarge}`}>
           {value?.map((item, index) => (
             <li key={index} className={styles.li}>
               <Circle
